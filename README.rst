@@ -13,7 +13,7 @@ IETF-RIB-Status
 **YANG Model**
 ---------------
 
-    IETF-Routing (https://tools.ietf.org/html/rfc8349)
+    **IETF-Routing:** (https://tools.ietf.org/html/rfc8349)
 
 **Protocols**
 --------------
