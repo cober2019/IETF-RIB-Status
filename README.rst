@@ -9,6 +9,11 @@ IETF-RIB-Status
 
     IETF RIB Status allows you to view your current RIB table as well as poll the table and compare to previous. Any entries that are flapping will be displayed
     on the screen without reloading the page
+    
+**YANG Model**
+---------------
+
+    IETF-Routing (https://tools.ietf.org/html/rfc8349)
 
 **Protocols**
 --------------
