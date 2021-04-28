@@ -1,0 +1,53 @@
+
+<table class="table align-items-center table-striped" id="ribTable">
+    <thead class="thead-light">
+    <tr>
+        <th class="text-center" scope="col">Name</th>
+        <th class="text-center" scope="col">Address-Family</th>
+        <th class="text-center" scope="col">Destination</th>
+        <th class="text-center" scope="col">Prefrence</th>
+        <th class="text-center" scope="col">Metric</th>
+        <th class="text-center" scope="col">Nex-Hop</th>
+        <th class="text-center" scope="col">Out Interface</th>
+        <th class="text-center" scope="col">Is Active</th>
+        <th class="text-center" scope="col">Source Protocol</th>
+    </tr>
+    </thead>
+    <tbody>
+        {% for k, v in routes.items() %}
+           {% for i in v %}
+            <tr style="height:1px">
+                <td class="text-center" scope="row">
+                    {{ i.name }}
+                </td>
+                <td class="text-center" scope="row">
+                    {{ i.address_family }}
+                </td>
+                <td class="text-center" scope="row">
+                    {{ i.dest_prefix }}
+                </td>
+                <td class="text-center" scope="row">
+                    {{ i.route_preference }}
+                </td>
+                <td class="text-center" scope="row">
+                    {{ i.metric }}
+                </td>
+
+                <td class="text-center" scope="row">
+                    {{ i.next_hop }}
+                </td>
+
+                <td class="text-center" scope="row">
+                    {{ i.outgoing_interface }}
+                </td>
+
+                <td class="text-center" scope="row">
+                    {{ i.active }}
+                </td>
+                <td class="text-center" scope="row">
+                    {{ i.source_protocol }}
+                </td>
+            </tr>
+        {% endfor %}
+    {%endfor%}
+</table>

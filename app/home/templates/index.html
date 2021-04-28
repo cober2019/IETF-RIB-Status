@@ -1,0 +1,316 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}{% endblock title %}
+
+{% block stylesheets %}
+
+{% endblock stylesheets %}
+
+{% block content %}
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
+<script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+
+//Apply DataTable CDN, CSS and JS to tables
+<script>
+    $(document).ready( function () {
+    $('#ribTable').DataTable();
+} );
+</script>
+<script>
+    $(document).ready( function () {
+    $('#diffTable').DataTable();
+} );
+</script>
+<script>
+    $(document).ready( function () {
+    $('#protocolTable').DataTable();
+} );
+</script>
+
+<script>
+
+function getRib(callback){
+ $.ajax({
+  url: '/index',
+  type: 'POST',
+  data: {'getRibs': 'getRibs'},
+  success: function(response) {
+          callback(response)
+        }
+     });
+}
+
+function getFlapping(callback){
+ $.ajax({
+  url: '/index',
+  type: 'POST',
+  data: {'flappingRoutes': 'flappingRoutes'},
+  success: function(response) {
+              callback(response)
+            }
+     });
+}
+
+//Function to be exucted on page load
+window.onload =  function() {
+    //Call funtion every 15 seconds
+    setInterval(callRibs, 15000);
+    function callRibs(){
+        //Make AJAX call return function reponse (HTML Template)
+        getRib(function(response) {
+            try{
+                  //Using HTML id, destroy the current table, apply response
+                  $("#ribTable").DataTable().destroy()
+                  $('#ribTable').html(response.data);
+                  $('#ribTable').DataTable({"pagingType": "full_numbers"});
+            }
+      catch(error){}
+
+        });
+    }
+
+    //Call funtion every 20 seconds
+    setInterval(BouncyRoutes, 20000);
+    function BouncyRoutes(){
+        getFlapping(function(response) {
+            try{
+                  //Using HTML id, destroy the current table, apply response
+                  $("#diffTable").DataTable().destroy()
+                  $('#diffTable').html(response.data);
+                  $('#diffTable').DataTable({"pagingType": "full_numbers"});
+              }
+            catch(error){}
+        });
+    }
+}
+
+</script>
+
+<div class="row">
+    <div class="col-xl-12">
+        <div class="card">
+            <div class="card-header border-0">
+                <div class="row align-items-center">
+                    <div class="col ">
+                    <h3 class="mb-0">Protocol/ID</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <span class="counter pull-right"></span>
+                <table class="table align-items-center table-striped" id="protocolTable">
+                    <thead class="thead-light">
+                    <tr>
+                        <th class="text-center" scope="col">Name</th>
+                        <th class="text-center" scope="col">Interface</th>
+                        <th class="text-center" scope="col">Type</th>
+                        <th class="text-center" scope="col">Protocol</th>
+                        <th class="text-center" scope="col">id</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for i in protocols %}
+                        <tr style="height:1px">
+                            <td class="text-center" scope="row">
+                                {{ i.name }}
+                            </td>
+                            <td class="text-center" scope="row">
+                                {{ i.interfaces }}
+                            </td>
+                            <td class="text-center" scope="row">
+                                {{ i.type }}
+                            </td>
+                            <td class="text-center" scope="row">
+                                {{ i.protocol }}
+                            </td>
+                            <td class="text-center" scope="row">
+                                {{ i.id }}
+                            </td>
+                        </tr>
+                    {%endfor%}
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xl-12">
+        <div class="card">
+            <div class="card-header border-0">
+                <div class="row align-items-center">
+                    <div class="col ">
+                    <h3 class="mb-0">Flapping Routes</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <span class="counter pull-right"></span>
+                <br/>
+                <table class="table align-items-center table-striped" id="diffTable">
+                    <thead class="thead-light">
+                    <tr>
+                        <th class="text-center" scope="col">Name</th>
+                        <th class="text-center" scope="col">Address-Family</th>
+                        <th class="text-center" scope="col">Destination</th>
+                        <th class="text-center" scope="col">Prefrence</th>
+                        <th class="text-center" scope="col">Metric</th>
+                        <th class="text-center" scope="col">Nex-Hop</th>
+                        <th class="text-center" scope="col">Out Interface</th>
+                        <th class="text-center" scope="col">Is Active</th>
+                        <th class="text-center" scope="col">Source Protocol</th>
+                        <th class="text-center" scope="col">Time</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for i in diff_routes['routes'] %}
+                            {%if i.status == 'orange'%}
+                                <tr style="height:1px">
+                                    <td style="background-color: orange;" class="text-center" scope="row">
+                                        {{ i.name }}
+                                    </td>
+                                    <td style="background-color: orange;" class="text-center" scope="row">
+                                        {{ i.address_family }}
+                                    </td>
+                                    <td style="background-color: orange;" class="text-center" scope="row">
+                                        {{ i.dest_prefix }}
+                                    </td>
+                                    <td style="background-color: orange;" class="text-center" scope="row">
+                                        {{ i.route_preference }}
+                                    </td>
+                                    <td style="background-color: orange;" class="text-center" scope="row">
+                                        {{ i.metric }}
+                                    </td>
+                                    <td style="background-color: orange;" class="text-center" scope="row">
+                                        {{ i.next_hop }}
+                                    </td>
+
+                                    <td style="background-color: orange;" class="text-center" scope="row">
+                                        {{ i.outgoing_interface }}
+                                    </td>
+                                    <td style="background-color: orange;" class="text-center" scope="row">
+                                        {{ i.active }}
+                                    </td>
+                                    <td style="background-color: orange;" class="text-center" scope="row">
+                                        {{ i.source_protocol }}
+                                    </td>
+                                    <td style="background-color: orange;" class="text-center" scope="row">
+                                        {{ i.time }}
+                                    </td>
+                                </tr>
+                            {%elif  i.status == 'green'%}
+                                <tr style="height:1px">
+                                    <td style="background-color: palegreen;" class="text-center" scope="row">
+                                        {{ i.name }}
+                                    </td>
+                                    <td style="background-color: palegreen;" class="text-center" scope="row">
+                                        {{ i.address_family }}
+                                    </td>
+                                    <td style="background-color: palegreen;" class="text-center" scope="row">
+                                        {{ i.dest_prefix }}
+                                    </td>
+                                    <td style="background-color: palegreen;" class="text-center" scope="row">
+                                        {{ i.route_preference }}
+                                    </td>
+                                    <td style="background-color: palegreen;" class="text-center" scope="row">
+                                        {{ i.metric }}
+                                    </td>
+                                    <td style="background-color: palegreen;" class="text-center" scope="row">
+                                        {{ i.next_hop }}
+                                    </td>
+                                    <td style="background-color: palegreen;" class="text-center" scope="row">
+                                        {{ i.outgoing_interface }}
+                                    </td>
+                                    <td style="background-color: palegreen;" class="text-center" scope="row">
+                                        {{ i.active }}
+                                    </td>
+                                    <td style="background-color: palegreen;" class="text-center" scope="row">
+                                        {{ i.source_protocol }}
+                                    </td>
+                                    <td style="background-color: orange;" class="text-center" scope="row">
+                                        {{ i.time }}
+                                    </td>
+                                </tr>
+                            {%endif%}
+                        {%endfor%}
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xl-12">
+        <div class="card">
+            <div class="card-header border-0">
+                <div class="row align-items-center">
+                    <div class="col ">
+                    <h3 class="mb-0">RIB Entries</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <span class="counter pull-right"></span>
+                <br/>
+                <table class="table align-items-center table-striped" id="ribTable">
+                    <thead class="thead-light">
+                    <tr>
+                        <th class="text-center" scope="col">Name</th>
+                        <th class="text-center" scope="col">Address-Family</th>
+                        <th class="text-center" scope="col">Destination</th>
+                        <th class="text-center" scope="col">Prefrence</th>
+                        <th class="text-center" scope="col">Metric</th>
+                        <th class="text-center" scope="col">Nex-Hop</th>
+                        <th class="text-center" scope="col">Out Interface</th>
+                        <th class="text-center" scope="col">Is Active</th>
+                        <th class="text-center" scope="col">Source Protocol</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for k, v in routes.items() %}
+                           {% for i in v %}
+                            <tr style="height:1px">
+                                <td class="text-center" scope="row">
+                                    {{ i.name }}
+                                </td>
+                                <td class="text-center" scope="row">
+                                    {{ i.address_family }}
+                                </td>
+                                <td class="text-center" scope="row">
+                                    {{ i.dest_prefix }}
+                                </td>
+                                <td class="text-center" scope="row">
+                                    {{ i.route_preference }}
+                                </td>
+                                <td class="text-center" scope="row">
+                                    {{ i.metric }}
+                                </td>
+
+                                <td class="text-center" scope="row">
+                                    {{ i.next_hop }}
+                                </td>
+
+                                <td class="text-center" scope="row">
+                                    {{ i.outgoing_interface }}
+                                </td>
+
+                                <td class="text-center" scope="row">
+                                    {{ i.active }}
+                                </td>
+                                <td class="text-center" scope="row">
+                                    {{ i.source_protocol }}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {%endfor%}
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}
+
+{% block javascripts %}
+
+
+{% endblock javascripts %}

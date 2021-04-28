@@ -1,0 +1,87 @@
+<table class="table align-items-center table-striped" id="diffTable">
+    <thead class="thead-light">
+    <tr>
+        <th class="text-center" scope="col">Name</th>
+        <th class="text-center" scope="col">Address-Family</th>
+        <th class="text-center" scope="col">Destination</th>
+        <th class="text-center" scope="col">Prefrence</th>
+        <th class="text-center" scope="col">Metric</th>
+        <th class="text-center" scope="col">Nex-Hop</th>
+        <th class="text-center" scope="col">Out Interface</th>
+        <th class="text-center" scope="col">Is Active</th>
+        <th class="text-center" scope="col">Source Protocol</th>
+        <th class="text-center" scope="col">Time</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for i in diff_routes['routes'] %}
+        {%if i.status == 'orange'%}
+            <tr style="height:1px">
+                <td style="background-color: orange;" class="text-center" scope="row">
+                    {{ i.name }}
+                </td>
+                <td style="background-color: orange;" class="text-center" scope="row">
+                    {{ i.address_family }}
+                </td>
+                <td style="background-color: orange;" class="text-center" scope="row">
+                    {{ i.dest_prefix }}
+                </td>
+                <td style="background-color: orange;" class="text-center" scope="row">
+                    {{ i.route_preference }}
+                </td>
+                <td style="background-color: orange;" class="text-center" scope="row">
+                    {{ i.metric }}
+                </td>
+                <td style="background-color: orange;" class="text-center" scope="row">
+                    {{ i.next_hop }}
+                </td>
+
+                <td style="background-color: orange;" class="text-center" scope="row">
+                    {{ i.outgoing_interface }}
+                </td>
+                <td style="background-color: orange;" class="text-center" scope="row">
+                    {{ i.active }}
+                </td>
+                <td style="background-color: orange;" class="text-center" scope="row">
+                    {{ i.source_protocol }}
+                </td>
+                <td style="background-color: orange;" class="text-center" scope="row">
+                    {{ i.time }}
+                </td>
+            </tr>
+        {%elif  i.status == 'green'%}
+            <tr style="height:1px">
+                <td style="background-color: palegreen;" class="text-center" scope="row">
+                    {{ i.name }}
+                </td>
+                <td style="background-color: palegreen;" class="text-center" scope="row">
+                    {{ i.address_family }}
+                </td>
+                <td style="background-color: palegreen;" class="text-center" scope="row">
+                    {{ i.dest_prefix }}
+                </td>
+                <td style="background-color: palegreen;" class="text-center" scope="row">
+                    {{ i.route_preference }}
+                </td>
+                <td style="background-color: palegreen;" class="text-center" scope="row">
+                    {{ i.metric }}
+                </td>
+                <td style="background-color: palegreen;" class="text-center" scope="row">
+                    {{ i.next_hop }}
+                </td>
+                <td style="background-color: palegreen;" class="text-center" scope="row">
+                    {{ i.outgoing_interface }}
+                </td>
+                <td style="background-color: palegreen;" class="text-center" scope="row">
+                    {{ i.active }}
+                </td>
+                <td style="background-color: palegreen;" class="text-center" scope="row">
+                    {{ i.source_protocol }}
+                </td>
+                <td style="background-color: palegreen;" class="text-center" scope="row">
+                    {{ i.time }}
+                </td>
+            </tr>
+    {%endif%}
+{%endfor%}
+</table>
