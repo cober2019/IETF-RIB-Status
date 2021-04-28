@@ -15,7 +15,6 @@ def create_netconf_connection(username, password, host, port) -> manager:
         netconf_session = manager.connect(host=host, port=port, username=username,
                                           password=password,
                                           device_params={'name': 'csr'})
-        break
     except manager.operations.errors.TimeoutExpiredError:
         pass
     except (AttributeError, OSError):
