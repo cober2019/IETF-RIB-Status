@@ -96,33 +96,47 @@ class Routing:
 
         self.routes = collections.defaultdict(list)
         self.protocols = []
-    
-        # Ceate NETCONF connection
-        with manager.connect(host=host, port=port, username=username, password=password, hostkey_verify=False,
-                             timeout=300) as session:
-    
-            xml_filter = f"""<filter>
-                            <routing-state xmlns:rt="urn:ietf:params:xml:ns:yang:ietf-routing"/>
-                            </filter>"""
 
-            # Get data using filter
-            get_state = session.get(xml_filter)
-            # Convert to dictionary and slice
-            int_status = xmltodict.parse(get_state.xml)["rpc-reply"]["data"]
-            # Loop thought data
-            for i in int_status.get('routing-state').get('routing-instance'):
-                for k, v in i.items():
-                    # Gets routing protocol data
-                    if k == 'routing-protocols':
-                        self._routing_protocols(v, i.get('name'), i.get('type'), i.get('interfaces', {}))
-                    elif k == 'ribs':
-                        # Gets RIB data
-                        self._rib(v)
+        try:
+            # Ceate NETCONF connection
+            with manager.connect(host=host, port=port, username=username, password=password, hostkey_verify=False,
+                                 timeout=300) as session:
 
-            self._get_diff()
-            self.previous_routes = self.routes
-            
-            return self.protocols, self.routes
+                xml_filter = f"""<filter>
+                                <routing-state xmlns:rt="urn:ietf:params:xml:ns:yang:ietf-routing"/>
+                                </filter>"""
+
+                # Get data using filter
+                get_state = session.get(xml_filter)
+                # Convert to dictionary and slice
+                int_status = xmltodict.parse(get_state.xml)["rpc-reply"]["data"]
+                # Loop thought data
+                for i in int_status.get('routing-state').get('routing-instance'):
+                    for k, v in i.items():
+                        # Gets routing protocol data
+                        if k == 'routing-protocols':
+                            self._routing_protocols(v, i.get('name'), i.get('type'), i.get('interfaces', {}))
+                        elif k == 'ribs':
+                            # Gets RIB data
+                            self._rib(v)
+
+                self._get_diff()
+                self.previous_routes = self.routes
+
+        except manager.operations.errors.TimeoutExpiredError:
+            pass
+        except (AttributeError, OSError):
+            pass
+        except manager.transport.TransportError:
+            pass
+        except manager.transport.AuthenticationError:
+            pass
+        except manager.operations.rpc.RPCError:
+            pass
+        except manager.operations.rpc.RPCError:
+            pass
+
+        return self.protocols, self.routes
 
     def _terminal_print(self):
         """Pring all protocols and rib to console"""
