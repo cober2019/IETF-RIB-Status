@@ -47,7 +47,7 @@ def login():
         netconf_session = ConnectWith.create_netconf_connection(request.form['username'], request.form['password'],
                                                                 request.form['ipAddress'], netconf_port)
       
-        if netconf_session == 'Connection Issue':
+        if netconf_session == 'error':
             return render_template('device_login.html', status="Login Failed")
         else:
             #Used to ensure user is authenticated prior to accessing any pages. If not 1 user is redirected to login page
