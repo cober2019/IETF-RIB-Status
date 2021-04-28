@@ -24,10 +24,9 @@ class Routing:
         self.protocols = []
         self._flapping_routes = collections.defaultdict(list)
         
-        def _routing_protocols(self, data, name, type, interfaces):
+    def _routing_protocols(self, data, name, type, interfaces):
         """Collect and store configured routing protocols"""
-        print(interfaces)
-    
+
         for i in is_instance(data.get('routing-protocol')):
             details = {}
             if isinstance(i.get('type'), dict):
