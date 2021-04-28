@@ -24,8 +24,9 @@ class Routing:
         self.protocols = []
         self._flapping_routes = collections.defaultdict(list)
         
-    def _routing_protocols(self, data, name, type, interfaces):
+        def _routing_protocols(self, data, name, type, interfaces):
         """Collect and store configured routing protocols"""
+        print(interfaces)
     
         for i in is_instance(data.get('routing-protocol')):
             details = {}
@@ -35,14 +36,22 @@ class Routing:
                 details['id'] = i.get('name', {})
                 details['name'] = name
                 details['type'] = type
-                details['interfaces'] = interfaces.get('interface', 'Not Assigned')
+
+                if isinstance(interfaces.get('interface'), list):
+                    details['interfaces'] = ', '.join(interfaces.get('interface', 'Not Assigned'))
+                else:
+                    details['interfaces'] = interfaces.get('interface', 'Not Assigned')
     
             else:
                 details['protocol'] = i.get('type')
                 details['id'] = i.get('name', {})
                 details['name'] = name
                 details['type'] = type
-                details['interfaces'] = interfaces.get('interface', 'Not Assigned')
+
+                if isinstance(interfaces.get('interface'), list):
+                    details['interfaces'] = ', '.join(interfaces.get('interface', 'Not Assigned'))
+                else:
+                    details['interfaces'] = interfaces.get('interface', 'Not Assigned')
     
             self.protocols.append(details)
     
