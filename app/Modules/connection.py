@@ -1,6 +1,5 @@
 """NCClient connection funtion"""
 
-from netmiko import ConnectHandler, ssh_exception
 from ncclient import manager
 
 def create_netconf_connection(username, password, host, port) -> manager:
