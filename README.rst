@@ -14,6 +14,8 @@ IETF-RIB-Status
     - On intial login and page reshreshes the page may take some time to load. This is due to fetching data from the device.
     - The program may have issues with cisco switches as the response time to get the RIB is very slow. Still don't hesitate to try!
     - Testing was dont with ASR and ISR. I haven't tried with any other vendor devices. Please let me know the results if you try (cober91130@gmail.com)
+    - Please run requirements.txt before using this program
+    - Access using http://{your_local_ip}:5000
     
 **YANG Model:**
 ---------------
