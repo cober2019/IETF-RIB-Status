@@ -58,6 +58,9 @@ window.onload =  function() {
     //Call funtion every 15 seconds
     var ribs = setInterval(callRibs, 30000);
     function callRibs(){
+
+        document.getElementById('ribStatus').innerHTML = 'Scanning...'
+
         //Make AJAX call return function reponse (HTML Template)
         getRib(function(response) {
             try{
@@ -65,6 +68,8 @@ window.onload =  function() {
                   $("#ribTable").DataTable().destroy()
                   $('#ribTable').html(response.data);
                   $('#ribTable').DataTable({"pagingType": "full_numbers"});
+
+                  document.getElementById('ribStatus').innerHTML = 'Idle'
             }
       catch(error){}
 
@@ -74,12 +79,16 @@ window.onload =  function() {
     //Call funtion every 20 seconds
     var bouncyRoutes = setInterval(BouncyRoutes, 35000);
     function BouncyRoutes(){
+
+        document.getElementById('flapStatus').innerHTML = 'Fetching'
+
         getFlapping(function(response) {
             try{
                   //Using HTML id, destroy the current table, apply response
                   $("#diffTable").DataTable().destroy()
                   $('#diffTable').html(response.data);
                   $('#diffTable').DataTable({"pagingType": "full_numbers"});
+                  document.getElementById('flapStatus').innerHTML = 'Idle'
               }
             catch(error){}
         });
@@ -148,7 +157,9 @@ window.onload =  function() {
             <div class="card-header border-0">
                 <div class="row align-items-center">
                     <div class="col ">
-                        <h3 class="mb-0">Flapping Routes
+                        <h3 class="mb-0">Flapping Routes<span>
+                        <h6 class="float-right" id="flapStatus">Idle</h6>
+                        </span>
                         </h3>
                     </div>
                 </div>
@@ -253,7 +264,10 @@ window.onload =  function() {
             <div class="card-header border-0">
                 <div class="row align-items-center">
                     <div class="col ">
-                    <h3 class="mb-0">RIB Entries</h3>
+                        <h3 class="mb-0" >RIB Entries<span>
+                        <h6 class="float-right" id="ribStatus">Idle</h6>
+                        </span>
+                        </h3>
                     </div>
                 </div>
             </div>
