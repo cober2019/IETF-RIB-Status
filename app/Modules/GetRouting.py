@@ -5,6 +5,7 @@ import xmltodict
 import collections
 import time
 
+
 def is_instance(list_or_dict):
     """Converts dictionary object to list"""
 
@@ -15,22 +16,23 @@ def is_instance(list_or_dict):
 
     return make_list
 
+
 class Routing:
-    
+
     def __init__(self):
 
         self.routes = collections.defaultdict(list)
         self.previous_routes = []
         self.protocols = []
         self._flapping_routes = collections.defaultdict(list)
-        
+
     def _routing_protocols(self, data, name, type, interfaces):
         """Collect and store configured routing protocols"""
 
         for i in is_instance(data.get('routing-protocol')):
             details = {}
             if isinstance(i.get('type'), dict):
-    
+
                 details['protocol'] = i.get('type').get('#text', {})
                 details['id'] = i.get('name', {})
                 details['name'] = name
@@ -40,7 +42,7 @@ class Routing:
                     details['interfaces'] = ', '.join(interfaces.get('interface', 'Not Assigned'))
                 else:
                     details['interfaces'] = interfaces.get('interface', 'Not Assigned')
-    
+
             else:
                 details['protocol'] = i.get('type')
                 details['id'] = i.get('name', {})
@@ -51,16 +53,15 @@ class Routing:
                     details['interfaces'] = ', '.join(interfaces.get('interface', 'Not Assigned'))
                 else:
                     details['interfaces'] = interfaces.get('interface', 'Not Assigned')
-    
+
             self.protocols.append(details)
-    
+
         else:
             pass
-    
-    
+
     def _rib(self, data):
         """Gets routes from RIB"""
-    
+
         # Iterate through RIB routes and create k, v pairs
         for j in data.get('rib'):
             for i in is_instance(j.get('routes', {}).get('route', {})):
@@ -74,31 +75,30 @@ class Routing:
                         route_details['dest_prefix'] = i.get('destination-prefix')
                         route_details['route_preference'] = i.get('route-preference')
                         route_details['metric'] = i.get('metric')
-    
+
                         if i.get('next-hop').get('outgoing-interface') is None:
                             route_details['outgoing_interface'] = '---'
                         else:
                             route_details['outgoing_interface'] = i.get('next-hop').get('outgoing-interface')
-    
+
                         route_details['next_hop'] = i.get('next-hop').get('next-hop-address')
-    
+
                         if i.get('active') is None:
                             route_details['active'] = 'Active Route'
                         else:
                             route_details['active'] = 'Inactive'
-    
+
                         if isinstance(i.get('source-protocol'), dict):
                             route_details['source_protocol'] = i.get('source-protocol').get('#text')
                         else:
                             route_details['source_protocol'] = i.get('source-protocol')
-    
+
                         # Append value of create key creating a list of dictionaries
                         self.routes[j.get('address_family')].append(route_details)
 
                     except AttributeError:
                         pass
 
-    
     def get_routing_info(self, host, port, username, password):
         """Creates NETCONF Session and initiate getting the current RIB and protocols"""
 
@@ -173,7 +173,7 @@ class Routing:
                 for i in v:
                     old_dest.append(i)
 
-            #If routes have been added to the rib, this code will be used
+            # If routes have been added to the rib, this code will be used
             if len(old_dest) < len(new_dest):
                 self._new_entries(new_dest, old_dest)
 
@@ -185,7 +185,7 @@ class Routing:
 
         for i in new_dest:
             for h in old_dest:
-                #Create status variable. Only change if the i or top level variable match the second level loop variable, h
+                # Create status variable. Only change if the i or top level variable match the second level loop variable, h
                 status = 0
                 if i.get('dest_prefix') == h.get('dest_prefix'):
                     status = 1
@@ -193,11 +193,12 @@ class Routing:
                 else:
                     continue
 
-            #If status is still zero at the end of the loop than the is new , and we will modify the dictionary
-            #to reflect the status
+            # If status is still zero at the end of the loop than the is new , and we will modify the dictionary
+            # to reflect the status
             if status == 0:
                 i.update({'status': 'green'})
                 i.update({'time': f'{time.strftime("%H")}:{time.strftime("%M")}:{time.strftime("%S")}'})
+                self._check_list_length()
                 self._flapping_routes['routes'].append(i)
 
     def _removed_entries(self, new_dest, old_dest):
@@ -205,25 +206,34 @@ class Routing:
 
         for i in old_dest:
             for h in new_dest:
-                #Create status variable. Only change if the i or top level variable match the second level loop variable, h
+                # Create status variable. Only change if the i or top level variable match the second level loop variable, h
                 status = 0
                 if i.get('dest_prefix') == h.get('dest_prefix'):
                     status = 1
                     break
                 else:
                     continue
-            #If status is still zero at the end of the loop than the route doesnt exist , and we will modify the dictionary
-            #to reflect the status
+            # If status is still zero at the end of the loop than the route doesnt exist , and we will modify the dictionary
+            # to reflect the status
             if status == 0:
                 i.update({'status': 'orange'})
                 i.update({'time': f'{time.strftime("%H")}:{time.strftime("%M")}:{time.strftime("%S")}'})
+                self._check_list_length()
                 self._flapping_routes['routes'].append(i)
 
+    def _check_list_length(self):
+        """Checks flapping routes list length"""
+
+        #Check list length to save on memory
+        if len(self._flapping_routes) == 20:
+            self._flapping_routes.pop()
 
     @property
     def flapping_routes(self):
         """Used to access _flapping_routes directly"""
-
         return self._flapping_routes
 
- 
+    @flapping_routes.setter
+    def flapping_routes(self, clear):
+        """Used to clear _flapping_routes varible"""
+        self._flapping_routes = clear
