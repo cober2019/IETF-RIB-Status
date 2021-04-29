@@ -10,6 +10,8 @@ IETF-RIB-Status
     IETF RIB Status allows you to view your current RIB table as well as poll the table and compare to previous. Any entries that are flapping will be displayed
     on the screen without reloading the page.
     
+    On intial login and page reshreshes the page may take some time to load. This is due to fetching data from the device.
+    
 **YANG Model:**
 ---------------
     **IETF-Routing:** (https://tools.ietf.org/html/rfc8349)
