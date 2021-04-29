@@ -10,8 +10,9 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
 <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
 
-//Apply DataTable CDN, CSS and JS to tables
+
 <script>
+    //Apply DataTable CDN, CSS and JS to tables
     $(document).ready( function () {
     $('#ribTable').DataTable();
 } );
@@ -27,64 +28,8 @@
 } );
 </script>
 
-<script>
 
-function getRib(callback){
- $.ajax({
-  url: '/index',
-  type: 'POST',
-  data: {'getRibs': 'getRibs'},
-  success: function(response) {
-          callback(response)
-        }
-     });
-}
 
-function getFlapping(callback){
- $.ajax({
-  url: '/index',
-  type: 'POST',
-  data: {'flappingRoutes': 'flappingRoutes'},
-  success: function(response) {
-              callback(response)
-            }
-     });
-}
-
-//Function to be exucted on page load
-window.onload =  function() {
-    //Call funtion every 15 seconds
-    setInterval(callRibs, 15000);
-    function callRibs(){
-        //Make AJAX call return function reponse (HTML Template)
-        getRib(function(response) {
-            try{
-                  //Using HTML id, destroy the current table, apply response
-                  $("#ribTable").DataTable().destroy()
-                  $('#ribTable').html(response.data);
-                  $('#ribTable').DataTable({"pagingType": "full_numbers"});
-            }
-      catch(error){}
-
-        });
-    }
-
-    //Call funtion every 20 seconds
-    setInterval(BouncyRoutes, 20000);
-    function BouncyRoutes(){
-        getFlapping(function(response) {
-            try{
-                  //Using HTML id, destroy the current table, apply response
-                  $("#diffTable").DataTable().destroy()
-                  $('#diffTable').html(response.data);
-                  $('#diffTable').DataTable({"pagingType": "full_numbers"});
-              }
-            catch(error){}
-        });
-    }
-}
-
-</script>
 
 <div class="row">
     <div class="col-xl-12">
@@ -139,7 +84,8 @@ window.onload =  function() {
             <div class="card-header border-0">
                 <div class="row align-items-center">
                     <div class="col ">
-                    <h3 class="mb-0">Flapping Routes</h3>
+                        <h3 class="mb-0">Flapping Routes
+                        </h3>
                     </div>
                 </div>
             </div>
@@ -306,6 +252,72 @@ window.onload =  function() {
         </div>
     </div>
 </div>
+
+<script>
+
+function getRib(callback){
+ $.ajax({
+  url: '/index',
+  type: 'POST',
+  data: {'getRibs': 'getRibs'},
+  success: function(response) {
+          callback(response)
+        }
+     });
+}
+
+function getFlapping(callback){
+ $.ajax({
+  url: '/index',
+  type: 'POST',
+  data: {'flappingRoutes': 'flappingRoutes'},
+  success: function(response) {
+              callback(response)
+            }
+     });
+}
+
+//Function to be exucted on page load
+window.onload =  function() {
+    //Call funtion every 15 seconds
+    var ribs = setInterval(callRibs, 30000);
+    function callRibs(){
+        //Make AJAX call return function reponse (HTML Template)
+        getRib(function(response) {
+            try{
+                  //Using HTML id, destroy the current table, apply response
+                  $("#ribTable").DataTable().destroy()
+                  $('#ribTable').html(response.data);
+                  $('#ribTable').DataTable({"pagingType": "full_numbers"});
+            }
+      catch(error){}
+
+        });
+    }
+
+    //Call funtion every 20 seconds
+    var bouncyRoutes = setInterval(BouncyRoutes, 35000);
+    function BouncyRoutes(){
+        getFlapping(function(response) {
+            try{
+                  //Using HTML id, destroy the current table, apply response
+                  $("#diffTable").DataTable().destroy()
+                  $('#diffTable').html(response.data);
+                  $('#diffTable').DataTable({"pagingType": "full_numbers"});
+              }
+            catch(error){}
+        });
+    }
+
+    window.addEventListener("beforeunload", function(event) {
+         console.log('clearing')
+         clearInterval(bouncyRoutes)
+         clearInterval(ribs)
+     });
+}
+
+</script>
+
 
 
 {% endblock content %}
