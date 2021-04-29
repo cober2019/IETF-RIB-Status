@@ -11,6 +11,7 @@ IETF-RIB-Status
     on the screen without reloading the page.
     
 **Notes**
+----------
     
     - On intial login and page refreshes the page may take some time to load. This is due to fetching data from the device.
     - You will notice 'Scanning...' and ''Fetching" status messages to show program activity.
@@ -25,7 +26,7 @@ IETF-RIB-Status
     **IETF-Routing:** (https://tools.ietf.org/html/rfc8349)
 
 **Login:**
----------
+-----------
    - IP Address should be whatever IP you use to manage the device
    - NETCONF port is default 830.
    
