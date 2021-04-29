@@ -5,10 +5,8 @@ from ncclient import manager
 def create_netconf_connection(username, password, host, port) -> manager:
     """Creates NETCONF Session"""
 
-    retries = 0
     netconf_session = 'error'
-
-    # Attempt connection 3 times
+    
     try:
 
         netconf_session = manager.connect(host=host, port=port, username=username,
