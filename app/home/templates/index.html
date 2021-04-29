@@ -58,7 +58,7 @@ window.onload =  function() {
     //Call funtion every 15 seconds
     var ribs = setInterval(callRibs, 30000);
     function callRibs(){
-
+        // Change element text when scanning for RIB
         document.getElementById('ribStatus').innerHTML = 'Scanning...'
 
         //Make AJAX call return function reponse (HTML Template)
@@ -69,6 +69,7 @@ window.onload =  function() {
                   $('#ribTable').html(response.data);
                   $('#ribTable').DataTable({"pagingType": "full_numbers"});
 
+                  // Change element text when scanning for RIB is complete
                   document.getElementById('ribStatus').innerHTML = 'Idle'
             }
       catch(error){}
@@ -79,7 +80,7 @@ window.onload =  function() {
     //Call funtion every 20 seconds
     var bouncyRoutes = setInterval(BouncyRoutes, 35000);
     function BouncyRoutes(){
-
+        //Change element text when fetching for flapping routes
         document.getElementById('flapStatus').innerHTML = 'Fetching'
 
         getFlapping(function(response) {
@@ -88,6 +89,8 @@ window.onload =  function() {
                   $("#diffTable").DataTable().destroy()
                   $('#diffTable').html(response.data);
                   $('#diffTable').DataTable({"pagingType": "full_numbers"});
+
+                  //Change element text when fetching for flapping routes has completed
                   document.getElementById('flapStatus').innerHTML = 'Idle'
               }
             catch(error){}
