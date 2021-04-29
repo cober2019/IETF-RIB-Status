@@ -55,7 +55,7 @@ function getFlapping(callback){
 
 //Function to be exucted on page load
 window.onload =  function() {
-    //Call funtion every 15 seconds
+    //Call funtion every 30 seconds
     var ribs = setInterval(callRibs, 30000);
     function callRibs(){
         // Change element text when scanning for RIB
@@ -77,7 +77,7 @@ window.onload =  function() {
         });
     }
 
-    //Call funtion every 20 seconds
+    //Call funtion every 35 seconds
     var bouncyRoutes = setInterval(BouncyRoutes, 35000);
     function BouncyRoutes(){
         //Change element text when fetching for flapping routes
@@ -113,7 +113,7 @@ window.onload =  function() {
             <div class="card-header border-0">
                 <div class="row align-items-center">
                     <div class="col ">
-                    <h3 class="mb-0">Protocol/ID</h3>
+                    <h4 class="mb-0">Protocol/ID</h4>
                     </div>
                 </div>
             </div>
@@ -160,10 +160,10 @@ window.onload =  function() {
             <div class="card-header border-0">
                 <div class="row align-items-center">
                     <div class="col ">
-                        <h3 class="mb-0">Flapping Routes<span>
+                        <h4 class="mb-0">Flapping Routes<span>
                         <h6 class="float-right" id="flapStatus">Idle</h6>
                         </span>
-                        </h3>
+                        </h4>
                     </div>
                 </div>
             </div>
@@ -267,10 +267,10 @@ window.onload =  function() {
             <div class="card-header border-0">
                 <div class="row align-items-center">
                     <div class="col ">
-                        <h3 class="mb-0" >RIB Entries<span>
+                        <h4 class="mb-0" >RIB Entries<span>
                         <h6 class="float-right" id="ribStatus">Idle</h6>
                         </span>
-                        </h3>
+                        </h4>
                     </div>
                 </div>
             </div>
