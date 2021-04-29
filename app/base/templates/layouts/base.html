@@ -25,6 +25,15 @@
   } );
 
 </script>
+  <script>
+
+    window.addEventListener("#logout", function(event) {
+         console.log('clearing')
+         clearInterval(bouncyRoutes)
+         clearInterval(ribs)
+     });
+
+</script>
 
 
   {% block stylesheets %}{% endblock stylesheets %}
