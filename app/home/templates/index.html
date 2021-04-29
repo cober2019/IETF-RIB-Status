@@ -29,6 +29,70 @@
 </script>
 
 
+<script>
+
+function getRib(callback){
+ $.ajax({
+  url: '/index',
+  type: 'POST',
+  data: {'getRibs': 'getRibs'},
+  success: function(response) {
+          callback(response)
+        }
+     });
+}
+
+function getFlapping(callback){
+ $.ajax({
+  url: '/index',
+  type: 'POST',
+  data: {'flappingRoutes': 'flappingRoutes'},
+  success: function(response) {
+              callback(response)
+            }
+     });
+}
+
+//Function to be exucted on page load
+window.onload =  function() {
+    //Call funtion every 15 seconds
+    var ribs = setInterval(callRibs, 30000);
+    function callRibs(){
+        //Make AJAX call return function reponse (HTML Template)
+        getRib(function(response) {
+            try{
+                  //Using HTML id, destroy the current table, apply response
+                  $("#ribTable").DataTable().destroy()
+                  $('#ribTable').html(response.data);
+                  $('#ribTable').DataTable({"pagingType": "full_numbers"});
+            }
+      catch(error){}
+
+        });
+    }
+
+    //Call funtion every 20 seconds
+    var bouncyRoutes = setInterval(BouncyRoutes, 35000);
+    function BouncyRoutes(){
+        getFlapping(function(response) {
+            try{
+                  //Using HTML id, destroy the current table, apply response
+                  $("#diffTable").DataTable().destroy()
+                  $('#diffTable').html(response.data);
+                  $('#diffTable').DataTable({"pagingType": "full_numbers"});
+              }
+            catch(error){}
+        });
+    }
+
+    window.addEventListener("beforeunload", function(event) {
+         console.log('clearing')
+         clearInterval(bouncyRoutes)
+         clearInterval(ribs)
+     });
+}
+
+</script>
 
 
 <div class="row">
@@ -252,71 +316,6 @@
         </div>
     </div>
 </div>
-
-<script>
-
-function getRib(callback){
- $.ajax({
-  url: '/index',
-  type: 'POST',
-  data: {'getRibs': 'getRibs'},
-  success: function(response) {
-          callback(response)
-        }
-     });
-}
-
-function getFlapping(callback){
- $.ajax({
-  url: '/index',
-  type: 'POST',
-  data: {'flappingRoutes': 'flappingRoutes'},
-  success: function(response) {
-              callback(response)
-            }
-     });
-}
-
-//Function to be exucted on page load
-window.onload =  function() {
-    //Call funtion every 15 seconds
-    var ribs = setInterval(callRibs, 30000);
-    function callRibs(){
-        //Make AJAX call return function reponse (HTML Template)
-        getRib(function(response) {
-            try{
-                  //Using HTML id, destroy the current table, apply response
-                  $("#ribTable").DataTable().destroy()
-                  $('#ribTable').html(response.data);
-                  $('#ribTable').DataTable({"pagingType": "full_numbers"});
-            }
-      catch(error){}
-
-        });
-    }
-
-    //Call funtion every 20 seconds
-    var bouncyRoutes = setInterval(BouncyRoutes, 35000);
-    function BouncyRoutes(){
-        getFlapping(function(response) {
-            try{
-                  //Using HTML id, destroy the current table, apply response
-                  $("#diffTable").DataTable().destroy()
-                  $('#diffTable').html(response.data);
-                  $('#diffTable').DataTable({"pagingType": "full_numbers"});
-              }
-            catch(error){}
-        });
-    }
-
-    window.addEventListener("beforeunload", function(event) {
-         console.log('clearing')
-         clearInterval(bouncyRoutes)
-         clearInterval(ribs)
-     });
-}
-
-</script>
 
 
 
