@@ -10,7 +10,10 @@ IETF-RIB-Status
     IETF RIB Status allows you to view your current RIB table as well as poll the table and compare to previous. Any entries that are flapping will be displayed
     on the screen without reloading the page.
     
-    On intial login and page reshreshes the page may take some time to load. This is due to fetching data from the device.
+**Notes**
+    - On intial login and page reshreshes the page may take some time to load. This is due to fetching data from the device.
+    - The program may have issues with cisco switches as the response time to get the RIB is very slow. Still don't hesitate to try!
+    - Testing was dont with ASR and ISR. I havnt tried with any other vendor device. Please let me know the results if you try (cober91130@gmail.com)
     
 **YANG Model:**
 ---------------
