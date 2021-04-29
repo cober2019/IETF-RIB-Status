@@ -15,6 +15,7 @@ from app.base.forms import LoginForm, NewAccountForm
 from app.base.models import User
 from app.base.util import verify_pass
 import app.Modules.connection as ConnectWith
+import collections
 
 
 device = None
@@ -71,6 +72,10 @@ def index():
     elif request.form.get('flappingRoutes'):
         #Access flapping_routes property using the route_session object
         return jsonify({'data': render_template('updated_flap_routes.html', diff_routes=route_session.flapping_routes)})
+    elif request.form.get('clearFlaps'):
+        #Clear flapping_routes property
+        route_session.clear_flapping_routes = collections.defaultdict(list)
+        return jsonify({'data': 'Flapping Routes Cleared'})
     else:
         #Create Routing object. Store variable globally
         route_session = GetRouting.Routing()
