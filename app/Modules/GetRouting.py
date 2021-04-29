@@ -198,7 +198,6 @@ class Routing:
             if status == 0:
                 i.update({'status': 'green'})
                 i.update({'time': f'{time.strftime("%H")}:{time.strftime("%M")}:{time.strftime("%S")}'})
-                self._check_list_length()
                 self._flapping_routes['routes'].append(i)
 
     def _removed_entries(self, new_dest, old_dest):
@@ -218,15 +217,7 @@ class Routing:
             if status == 0:
                 i.update({'status': 'orange'})
                 i.update({'time': f'{time.strftime("%H")}:{time.strftime("%M")}:{time.strftime("%S")}'})
-                self._check_list_length()
                 self._flapping_routes['routes'].append(i)
-
-    def _check_list_length(self):
-        """Checks flapping routes list length"""
-
-        #Check list length to save on memory
-        if len(self._flapping_routes) == 20:
-            self._flapping_routes.pop()
 
     @property
     def flapping_routes(self):
