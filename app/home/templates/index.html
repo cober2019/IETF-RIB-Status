@@ -81,7 +81,7 @@ window.onload =  function() {
     var bouncyRoutes = setInterval(BouncyRoutes, 35000);
     function BouncyRoutes(){
         //Change element text when fetching for flapping routes
-        document.getElementById('flapStatus').innerHTML = 'Fetching'
+        document.getElementById('flapStatus').innerHTML = 'Fetching...'
 
         getFlapping(function(response) {
             try{
