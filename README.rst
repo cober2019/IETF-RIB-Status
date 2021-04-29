@@ -11,7 +11,8 @@ IETF-RIB-Status
     on the screen without reloading the page.
     
 **Notes**
-    - On intial login and page refhreshes the page may take some time to load. This is due to fetching data from the device.
+    
+    - On intial login and page refreshes the page may take some time to load. This is due to fetching data from the device.
     - You will notice 'Scanning...' and ''Fetching" status messages to show program activity.
     - The program may have issues with cisco switches as the response time to get the RIB is very slow. Still don't hesitate to try!
     - Testing was done with ASR and ISR. I haven't tried with any other vendor devices. Please let me know the results if you try (cober91130@gmail.com)
@@ -25,7 +26,9 @@ IETF-RIB-Status
 
 **Login:**
 ---------
-    
+   - IP Address should be whatever IP you use to manage the device
+   - NETCONF port is default 830.
+   
 .. image:: https://github.com/cober2019/IETF-RIB-Status/blob/main/images/Login.PNG
     :target: -
 
