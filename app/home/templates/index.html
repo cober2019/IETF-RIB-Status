@@ -12,20 +12,19 @@
 
 
 <script>
+
     //Apply DataTable CDN, CSS and JS to tables
     $(document).ready( function () {
     $('#ribTable').DataTable();
-} );
-</script>
-<script>
+    } );
+
     $(document).ready( function () {
     $('#diffTable').DataTable();
-} );
-</script>
-<script>
+    } );
+
     $(document).ready( function () {
     $('#protocolTable').DataTable();
-} );
+    } );
 </script>
 
 
@@ -71,14 +70,14 @@ window.onload =  function() {
 
                   // Change element text when scanning for RIB is complete
                   document.getElementById('ribStatus').innerHTML = 'Idle'
+                  BouncyRoutes()
+
             }
       catch(error){}
 
         });
     }
 
-    //Call funtion every 35 seconds
-    var bouncyRoutes = setInterval(BouncyRoutes, 35000);
     function BouncyRoutes(){
         //Change element text when fetching for flapping routes
         document.getElementById('flapStatus').innerHTML = 'Fetching...'
